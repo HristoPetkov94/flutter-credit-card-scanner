@@ -41,6 +41,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.17.2"
+  credit_card_scanner:
+    dependency: "direct main"
+    description:
+      name: credit_card_scanner
+      sha256: "9bbfcac698f01bb32cbb2abfc6a9efa7fdea006e5a982cb4b8dc69fa0e8c1d19"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.5"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -186,3 +194,4 @@ packages:
     version: "0.1.4-beta"
 sdks:
   dart: ">=3.1.1 <4.0.0"
+  flutter: ">=1.10.0"
