@@ -15,20 +15,24 @@ class CreditCardPage extends StatefulWidget {
 class _CreditCardPageState extends State<CreditCardPage> {
   final _formKey = GlobalKey<FormState>();
 
-  var cardName = 'XXXXXX XXXXXX';
-  var cardNumber = 'XXXX-XXXX-XXXX-XXXX';
-  var cardExpDate = 'XX/XX';
-  var cvv = '';
+  var _cardName = 'XXXXXX XXXXXX';
+  var _cardNumber = 'XXXX-XXXX-XXXX-XXXX';
+  var _cardExpDate = 'XX/XX';
+  var _cvv = '';
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        creditCard(cardName, cardNumber, cardExpDate),
-        _creditCardFormFields(),
-        _buttons(),
-      ],
+    return Center(
+      child: SizedBox(width: 450,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            creditCard(_cardName, _cardNumber, _cardExpDate),
+            _creditCardFormFields(),
+            _buttons(),
+          ],
+        ),
+      ),
     );
   }
 
@@ -46,23 +50,21 @@ class _CreditCardPageState extends State<CreditCardPage> {
   }
 
   Widget _creditCardFormFields() {
-    return SizedBox(
-      width: 450,
-      child: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            _cardNameTextFormField(),
-            _cardNumberTextFormField(),
-            _cardDateAndCvvTextFormFields()
-          ],
-        ),
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          _cardNameTextFormField(),
+          _cardNumberTextFormField(),
+          _cardDateAndCvvTextFormFields()
+        ],
       ),
     );
   }
 
   Widget _cardNameTextFormField() {
     return TextFormField(
+      key: const Key('cardNameField'),
       maxLength: 25,
       decoration: const InputDecoration(labelText: 'Card Holder Name'),
       validator: (value) {
@@ -72,13 +74,14 @@ class _CreditCardPageState extends State<CreditCardPage> {
         return null;
       },
       onSaved: (value) {
-        cardName = value!;
+        _cardName = value!;
       },
     );
   }
 
   Widget _cardNumberTextFormField() {
     return TextFormField(
+      key: const Key('cardNumberField'),
       maxLength: 16,
       decoration: const InputDecoration(
         labelText: 'Card Number',
@@ -88,14 +91,14 @@ class _CreditCardPageState extends State<CreditCardPage> {
           return 'Please enter a card number.';
         } else if (!ValidationUtils.isNumeric(value)) {
           return 'Card number should only contain numeric digits.';
-        } else  if (value.length < 16) {
+        } else if (value.length < 16) {
           return 'Card number should be 16 digits long.';
         }
         return null;
       },
       inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'\s'))],
       onSaved: (value) {
-        cardNumber = value!.trim();
+        _cardNumber = value!.trim();
       },
     );
   }
@@ -107,6 +110,7 @@ class _CreditCardPageState extends State<CreditCardPage> {
         Expanded(
           flex: 2,
           child: TextFormField(
+            key: const Key('dateFormField'),
             maxLength: 5,
             decoration: const InputDecoration(
               labelText: 'Expiry Date (MM/YY)',
@@ -120,7 +124,7 @@ class _CreditCardPageState extends State<CreditCardPage> {
               return null;
             },
             onSaved: (value) {
-              cardExpDate = value!;
+              _cardExpDate = value!;
             },
           ),
         ),
@@ -128,6 +132,7 @@ class _CreditCardPageState extends State<CreditCardPage> {
         Expanded(
           flex: 1,
           child: TextFormField(
+            key: const Key('cardCvvField'),
             maxLength: 3,
             decoration: const InputDecoration(
               labelText: 'CVV',
@@ -141,7 +146,7 @@ class _CreditCardPageState extends State<CreditCardPage> {
               return null;
             },
             onSaved: (value) {
-              cvv = value!;
+              _cvv = value!;
             },
           ),
         ),
@@ -153,18 +158,22 @@ class _CreditCardPageState extends State<CreditCardPage> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        ElevatedButton.icon(
-          onPressed: () {},
-          icon: const Icon(Icons.camera_alt, size: 32),
-          label: const Text('Scanner', style: TextStyle(fontSize: 20)),
-          style: _buttonStyle(),
+        Flexible(
+          child: ElevatedButton.icon(
+            onPressed: () {},
+            icon: const Icon(Icons.camera_alt, size: 32),
+            label: const Text('Scanner', style: TextStyle(fontSize: 20)),
+            style: _buttonStyle(),
+          ),
         ),
         const SizedBox(width: 14),
-        ElevatedButton.icon(
-          onPressed: _submitButton,
-          icon: const Icon(Icons.check, size: 32),
-          label: const Text('Submit', style: TextStyle(fontSize: 20)),
-          style: _buttonStyle(),
+        Flexible(
+          child: ElevatedButton.icon(
+            onPressed: _submitButton,
+            icon: const Icon(Icons.check, size: 32),
+            label: const Text('Submit', style: TextStyle(fontSize: 20)),
+            style: _buttonStyle(),
+          ),
         ),
       ],
     );

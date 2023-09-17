@@ -13,7 +13,6 @@ class CreditCardScanner extends StatelessWidget {
           title: const Text('Credit Card Scanner'),
         ),
         body: Container(
-          width: double.infinity,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [

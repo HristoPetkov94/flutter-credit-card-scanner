@@ -37,14 +37,19 @@ Widget creditCard(String cardName, String cardNumber, String expDate) {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              const Image(
-                image: AssetImage('assets/chip.png'),
-                width: 50,
-                height: 100,
+              const Expanded(
+                flex: 1,
+                child: Image(
+                  image: AssetImage('assets/chip.png'),
+                  height: 50,
+                ),
               ),
-              Text(
-                _getCardNumber(cardNumber),
-                style: const TextStyle(color: Colors.white, fontSize: 30),
+              Expanded(
+                flex: 2,
+                child: Text(
+                  _getCardNumber(cardNumber),
+                  style: const TextStyle(color: Colors.white, fontSize: 27),
+                ),
               )
             ],
           ),

@@ -1,9 +1,5 @@
-import 'package:flutter/material.dart';
-
 class ValidationUtils {
-  static final formKey = GlobalKey<FormState>();
-
-  static bool isNumeric(String value) {
+  static bool isNumeric(String? value) {
     if (value == null) {
       return false;
     }
