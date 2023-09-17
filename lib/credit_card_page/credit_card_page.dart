@@ -24,7 +24,7 @@ class _CreditCardPageState extends State<CreditCardPage> {
       ]);
 
   var _cardName = 'XXXXXX XXXXXX';
-  var _cardNumber = 'XXXX-XXXX-XXXX-XXXX';
+  var _cardNumber = 'XXXX-XXXX-XXXX-XX';
   var _cardExpDate = 'XX/XX';
   var _cvv = '';
 
