@@ -25,7 +25,7 @@ class SuccessPage extends StatelessWidget {
             ),
             const SizedBox(height: 10.0),
             const Text(
-              'Your action was successful.',
+              'Your scan was successful.',
               style: TextStyle(fontSize: 16.0),
             ),
             const SizedBox(height: 20.0),
