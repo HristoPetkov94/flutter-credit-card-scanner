@@ -1,3 +1,4 @@
+import 'package:credit_card_scanner/credit_card_scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_credit_card_scanner/success_page/success_page.dart';
@@ -14,6 +15,13 @@ class CreditCardPage extends StatefulWidget {
 
 class _CreditCardPageState extends State<CreditCardPage> {
   final _formKey = GlobalKey<FormState>();
+  final _scanOptions = const CardScanOptions(
+      scanCardHolderName: true,
+      scanExpiryDate: true,
+      validCardsToScanBeforeFinishingScan: 5,
+      possibleCardHolderNamePositions: [
+        CardHolderNameScanPosition.belowCardNumber
+      ]);
 
   var _cardName = 'XXXXXX XXXXXX';
   var _cardNumber = 'XXXX-XXXX-XXXX-XXXX';
@@ -23,7 +31,8 @@ class _CreditCardPageState extends State<CreditCardPage> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: SizedBox(width: 450,
+      child: SizedBox(
+        width: 450,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -47,6 +56,18 @@ class _CreditCardPageState extends State<CreditCardPage> {
         ),
       );
     }
+  }
+
+  void _scanButton() async {
+    final cardDetails = await CardScanner.scanCard(scanOptions: _scanOptions);
+
+    if (!mounted || cardDetails == null) return;
+    setState(() {
+      _cardNumber = cardDetails.cardNumber;
+      _cardName = cardDetails.cardHolderName;
+      _cardExpDate = cardDetails.expiryDate;
+      _cardNumber = cardDetails.cardIssuer;
+    });
   }
 
   Widget _creditCardFormFields() {
@@ -160,7 +181,7 @@ class _CreditCardPageState extends State<CreditCardPage> {
       children: [
         Flexible(
           child: ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: _scanButton,
             icon: const Icon(Icons.camera_alt, size: 32),
             label: const Text('Scanner', style: TextStyle(fontSize: 20)),
             style: _buttonStyle(),
