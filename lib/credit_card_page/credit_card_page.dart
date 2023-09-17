@@ -15,6 +15,14 @@ class CreditCardPage extends StatefulWidget {
 
 class _CreditCardPageState extends State<CreditCardPage> {
   final _formKey = GlobalKey<FormState>();
+
+  final TextEditingController _cardNameController =
+      TextEditingController(text: 'XXXXXX XXXXXX');
+  final TextEditingController _cardNumberController =
+      TextEditingController(text: 'XXXX-XXXX-XXXX-X');
+  final TextEditingController _cardExpDateController =
+      TextEditingController(text: 'XX/XX');
+
   final _scanOptions = const CardScanOptions(
       scanCardHolderName: true,
       scanExpiryDate: true,
@@ -23,20 +31,24 @@ class _CreditCardPageState extends State<CreditCardPage> {
         CardHolderNameScanPosition.belowCardNumber
       ]);
 
-  var _cardName = 'XXXXXX XXXXXX';
-  var _cardNumber = 'XXXX-XXXX-XXXX-XX';
-  var _cardExpDate = 'XX/XX';
-  var _cvv = '';
+  @override
+  void dispose() {
+    super.dispose();
+    _cardNameController.dispose();
+    _cardNumberController.dispose();
+    _cardExpDateController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        width: 450,
+        width: 350,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            creditCard(_cardName, _cardNumber, _cardExpDate),
+            creditCard(_cardNameController.text, _cardNumberController.text,
+                _cardExpDateController.text),
             _creditCardFormFields(),
             _buttons(),
           ],
@@ -59,15 +71,16 @@ class _CreditCardPageState extends State<CreditCardPage> {
   }
 
   void _scanButton() async {
-    final cardDetails = await CardScanner.scanCard(scanOptions: _scanOptions);
+    try {
+      final cardDetails = await CardScanner.scanCard(scanOptions: _scanOptions);
 
-    if (!mounted || cardDetails == null) return;
-    setState(() {
-      _cardNumber = cardDetails.cardNumber;
-      _cardName = cardDetails.cardHolderName;
-      _cardExpDate = cardDetails.expiryDate;
-      _cardNumber = cardDetails.cardIssuer;
-    });
+      if (!mounted || cardDetails == null) return;
+      setState(() {
+        _cardNameController.text = cardDetails.cardHolderName;
+        _cardNumberController.text = cardDetails.cardNumber.trim();
+        _cardExpDateController.text = cardDetails.expiryDate;
+      });
+    } catch (e) {}
   }
 
   Widget _creditCardFormFields() {
@@ -86,6 +99,7 @@ class _CreditCardPageState extends State<CreditCardPage> {
   Widget _cardNameTextFormField() {
     return TextFormField(
       key: const Key('cardNameField'),
+      controller: _cardNameController,
       maxLength: 25,
       decoration: const InputDecoration(labelText: 'Card Holder Name'),
       validator: (value) {
@@ -95,7 +109,7 @@ class _CreditCardPageState extends State<CreditCardPage> {
         return null;
       },
       onSaved: (value) {
-        _cardName = value!;
+        _cardNameController.text = value!;
       },
     );
   }
@@ -103,6 +117,7 @@ class _CreditCardPageState extends State<CreditCardPage> {
   Widget _cardNumberTextFormField() {
     return TextFormField(
       key: const Key('cardNumberField'),
+      controller: _cardNumberController,
       maxLength: 16,
       decoration: const InputDecoration(
         labelText: 'Card Number',
@@ -119,7 +134,7 @@ class _CreditCardPageState extends State<CreditCardPage> {
       },
       inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'\s'))],
       onSaved: (value) {
-        _cardNumber = value!.trim();
+        _cardNumberController.text = value!.trim();
       },
     );
   }
@@ -132,6 +147,7 @@ class _CreditCardPageState extends State<CreditCardPage> {
           flex: 2,
           child: TextFormField(
             key: const Key('dateFormField'),
+            controller: _cardExpDateController,
             maxLength: 5,
             decoration: const InputDecoration(
               labelText: 'Expiry Date (MM/YY)',
@@ -145,7 +161,7 @@ class _CreditCardPageState extends State<CreditCardPage> {
               return null;
             },
             onSaved: (value) {
-              _cardExpDate = value!;
+              _cardExpDateController.text = value!;
             },
           ),
         ),
@@ -160,14 +176,11 @@ class _CreditCardPageState extends State<CreditCardPage> {
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter a CVV.';
+                return 'CVV is expected';
               } else if (!ValidationUtils.isNumeric(value)) {
                 return 'CVV should be numeric value.';
               }
               return null;
-            },
-            onSaved: (value) {
-              _cvv = value!;
             },
           ),
         ),
@@ -182,8 +195,8 @@ class _CreditCardPageState extends State<CreditCardPage> {
         Flexible(
           child: ElevatedButton.icon(
             onPressed: _scanButton,
-            icon: const Icon(Icons.camera_alt, size: 32),
-            label: const Text('Scanner', style: TextStyle(fontSize: 20)),
+            icon: const Icon(Icons.camera_alt, size: 30),
+            label: const Text('Scanner', style: TextStyle(fontSize: 16)),
             style: _buttonStyle(),
           ),
         ),
@@ -191,8 +204,8 @@ class _CreditCardPageState extends State<CreditCardPage> {
         Flexible(
           child: ElevatedButton.icon(
             onPressed: _submitButton,
-            icon: const Icon(Icons.check, size: 32),
-            label: const Text('Submit', style: TextStyle(fontSize: 20)),
+            icon: const Icon(Icons.check, size: 30),
+            label: const Text('Submit', style: TextStyle(fontSize: 16)),
             style: _buttonStyle(),
           ),
         ),

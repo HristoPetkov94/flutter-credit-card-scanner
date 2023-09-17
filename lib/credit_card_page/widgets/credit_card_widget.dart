@@ -2,26 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_credit_card_scanner/utils/validation_utils.dart';
 
 Widget creditCard(String cardName, String cardNumber, String expDate) {
-  return SingleChildScrollView(
-    scrollDirection: Axis.horizontal,
-    child: Container(
-      width: 450,
-      height: 250,
-      decoration: _boxDecoration(),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
+  return Container(
+    width: 350,
+    height: 200,
+    decoration: _boxDecoration(),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(
+              child: Padding(
                 padding: EdgeInsets.only(left: 20),
                 child: Image(
                   image: AssetImage('assets/logos/techpods_logo.png'),
-                  width: 100,
+                  width: 85,
                 ),
               ),
-              Padding(
+            ),
+            Flexible(
+              child: Padding(
                 padding: EdgeInsets.only(right: 20),
                 child: Text(
                   'Credit Card',
@@ -32,51 +33,55 @@ Widget creditCard(String cardName, String cardNumber, String expDate) {
                   ),
                 ),
               ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              const Expanded(
-                flex: 1,
-                child: Image(
-                  image: AssetImage('assets/chip.png'),
-                  height: 50,
-                ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const Expanded(
+              flex: 1,
+              child: Image(
+                image: AssetImage('assets/chip.png'),
+                height: 50,
               ),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  _getCardNumber(cardNumber),
-                  style: const TextStyle(color: Colors.white, fontSize: 27),
-                ),
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text(
+            ),
+            Expanded(
+              flex: 2,
+              child: Text(
+                _getCardNumber(cardNumber),
+                style: const TextStyle(color: Colors.white, fontSize: 22),
+              ),
+            )
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Flexible(
+              child: Text(
                 cardName,
                 style: const TextStyle(
                   color: Colors.white,
                 ),
               ),
-              Text(
+            ),
+            Flexible(
+              child: Text(
                 'THRU - $expDate',
                 style: const TextStyle(
                   color: Colors.white,
                 ),
               ),
-              const Image(
-                image: AssetImage('assets/logos/master_card_logo.png'),
-                width: 70,
-                height: 70,
-              ),
-            ],
-          )
-        ],
-      ),
+            ),
+            const Image(
+              image: AssetImage('assets/logos/master_card_logo.png'),
+              width: 70,
+              height: 70,
+            ),
+          ],
+        )
+      ],
     ),
   );
 }

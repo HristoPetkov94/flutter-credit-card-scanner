@@ -12,18 +12,21 @@ class CreditCardScanner extends StatelessWidget {
           centerTitle: true,
           title: const Text('Credit Card Scanner'),
         ),
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color.fromARGB(255, 253, 253, 253),
-                Color.fromARGB(255, 143, 149, 183),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+        body: SingleChildScrollView(
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color.fromARGB(255, 253, 253, 253),
+                  Color.fromARGB(255, 143, 149, 183),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
             ),
+            child: const CreditCardPage(),
           ),
-          child: const CreditCardPage(),
         ),
       ),
     );
